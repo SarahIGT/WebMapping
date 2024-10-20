@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>ST_Tourisme</title>
+    
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="RABT.geojson" > </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+	
+
+
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            background-color: #f0f0f0; 
+            background-image: url('image2/2742815.jpg'); 
+            background-size: cover; 
+        }
+        
+        #header {
+            text-align: center;
+            color: white; 
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); 
+            width: 93%;
+            border: 3px solid #000000;			
+        }
+
+        #logo {
+            width: 100px; /* Adjust logo size */
+			border: 2px solid #ffffff
+        }
+
+        #map {
+            width: 700px; 
+            height: 500px; 
+            border: 3px solid #000000; 
+            margin-top: 5px; 
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <img id="logo" src="image2/sara.png" alt="Logo" /> 
+        <h1>Bienvenue à Rabat : ville des lumières </h1> 
+        <p>Cliquez sur les marqueurs pour découvrir !</p> 
+		<p>Cette platforme vous recommande les bons coins à visiter, profitez de votre séjour ^^</p>
+    </div>
+
+    <div id="map"></div> 
+
+    <script>
+        var map = L.map('map').setView([33.976025, -6.845594], 11);
+
+        
+        var googleHybrid = L.tileLayer('https://{s}.googleapis.com/vt?x={x}&y={y}&z={z}', {
+            maxZoom: 21,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '&copy; <a href="https://www.google.com/intl/en_us/help/terms_maps.html">Google</a>'
+        }).addTo(map);
+
+		
+        var markers = L.markerClusterGroup();
+
+       
+        var TourHassan = L.marker([34.024307, -6.822979], { title: "Tour Hassan" }).bindPopup('<b>Tour Hassan</b><br><img src="image2/hassan.jpeg" alt="Tour Hassan" style="width:150px;"><br>La Tour Hassan est un minaret inachevé situé à Rabat.');
+        var MausoléeMohammedV = L.marker([34.022576, -6.821472], { title: "Mausolée Mohammed V" }).bindPopup('<b>Mausolée Mohammed V</b><br><img src="image2/mausolée.jpg" alt="Mausolée Mohammed V" style="width:150px;"><br>Le mausolée royal où reposent Mohammed V et ses deux fils.');
+        var baboudaya = L.marker([34.030987, -6.836543], { title: "Bab Oudaya" }).bindPopup('<b>Bab Oudaya</b><br><img src="image2/baboudaya.jpg" alt="Bab Oudaya" style="width:150px;"><br>La porte monumentale de la Kasbah des Oudayas à Rabat.');
+
+     
+        var MahajRiyad = L.marker([33.962490, -6.865870], { title: "Place Mahaj Riyad" }).bindPopup('<b>Place Mahaj Riyad</b><br><img src="image2/mahaj.png" alt="Mahaj Riyad" style="width:150px;"><br>Véritable cœur de ville, Mahaj Ryad Center offre un large éventail de produits et de services.');
+        var Zoo = L.marker([33.955975, -6.897352], { title: "Jardin Zoologique" }).bindPopup('<b>Jardin Zoologique</b><br><img src="image2/zoo.png" alt="Jardin Zoologique" style="width:150px;"><br>Le Jardin zoologique national de Rabat détient le plus grand nombre de Lions de l\'Atlas en captivité.');
+        var essalam = L.marker([33.922979, -6.826872], { title: "Dar Essalam" }).bindPopup('<b>Dar Essalam</b><br><img src="image2/dar essalam.png" alt="Dar Essalam" style="width:150px;"><br>Les golfeurs et les esthètes retrouvent en ce lieu la magie des plus beaux golfs.');
+        var saintpierre = L.marker([34.018064, -6.831317], {title : "Cathédrale"}).bindPopup('<b>Cathédrale Saint pierre</b><br><img src="image2/cathedrale.png" alt="Cathédrale" style="width:150px;"><br>La cathédrale Saint-Pierre est une cathédrale située à Rabat, capitale du Maroc, sur la place du Golan, anciennement place du Cardinal-Lavigerie, dans le quartier Hassan. Elle est le siège de l archidiocèse de Rabat.');
+
+
+        L.geoJSON(rabat).addTo(map);
+        
+        markers.addLayer(TourHassan);
+        markers.addLayer(MausoléeMohammedV);
+        markers.addLayer(baboudaya);
+        markers.addLayer(MahajRiyad);
+        markers.addLayer(Zoo);
+        markers.addLayer(essalam);
+		markers.addLayer(saintpierre);
+
+        
+        map.addLayer(markers);
+
+        
+        L.geoJSON(rabat, {
+            style: function(feature) {
+                return {
+                    color: "#ff0000",  
+                    weight: 2,        
+                    fillColor: "#ffffff", 
+                    fillOpacity: 0.01   
+                };
+            }
+        }).addTo(map);
+    </script>
+</body>
+</html>
